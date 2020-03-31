@@ -8,21 +8,19 @@ from os.path import isfile, join
 # totale_attualmente_positivi,nuovi_attualmente_positivi,dimessi_guariti,deceduti,totale_casi,tamponi
 class DataReader:
 
-    def __init__(self, regione):
-        if regione is None:
-            file = "C:\\Users\\LuigiBiasi\\Documents\\CODIV_19_data\\COVID-19\\dati-andamento-nazionale\\dpc-covid19-ita-andamento-nazionale.csv"
+    def __init__(self, file, regione):
+        if regione is None or regione == "Italia":
             all_data = pd.read_csv(file)
             all_data['data_normalized'] = pd.to_datetime(all_data['data']).dt.normalize()
             self.data = all_data
         else:
-            file = "C:\\Users\\LuigiBiasi\\Documents\\CODIV_19_data\\COVID-19\\dati-regioni\\dpc-covid19-ita-regioni.csv"
             self.regione = regione
             all_data = pd.read_csv(file)
             all_data['data_normalized'] = pd.to_datetime(all_data['data']).dt.normalize()
             self.data = all_data[all_data['denominazione_regione'] == regione]
 
     def get_positives(self):
-        return self.data[['data_normalized','data', 'totale_attualmente_positivi']]
+        return self.data[['data_normalized','data', 'totale_positivi']]
 
     def get_deaths(self):
         return self.data[['data_normalized','data', 'deceduti']]
